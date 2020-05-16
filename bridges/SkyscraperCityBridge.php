@@ -38,7 +38,7 @@ class SkyscraperCityBridge extends BridgeAbstract
 			$item['uri'] = $post->find('a[qid=post-number]', 0)->getAttribute('href');
 			$item['content'] = $post->find('article[itemprop=text]', 0)->innertext;
 			$item['author'] = $post->find('a.username[itemprop=url]', 0)->innertext;
-			$item['timestamp'] = $post->find('time[qid="post-date-time"]', 0)->getAttribute('datetime');
+			$item['timestamp'] = $post->find('time[qid=post-date-time]', 0)->getAttribute('datetime');
 			$this->items[] = $item;
 		}
 	}
