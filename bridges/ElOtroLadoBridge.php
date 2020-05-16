@@ -1,30 +1,42 @@
 <?PHP
-class ElOtroLadoBridge extends BridgeAbstract {
+class ElOtroLadoBridge extends BridgeAbstract
+{
 	const NAME        = 'ElOtroLado';
 	const URI         = 'https://www.elotrolado.net/';
 	const DESCRIPTION = 'Returns the latest posts from a forum thread';
 	const MAINTAINER  = 'brincowale';
-	const PARAMETERS = array();
-	const CACHE_TIMEOUT = 3600;
+	const PARAMETERS = array(array(
+		'id' => array(
+			'name' => 'Thread ID',
+			'type' => 'number',
+			'required' => true,
+			'title' => 'Insert thread ID',
+			'exampleValue' => '2011153'
+		)
+	));
+	const CACHE_TIMEOUT = 300;
 
-	public function collectData(){
-		$html = getSimpleHTMLDOM(self::URI . 'showthread.php?threadid=2011153');
-		
+	public function collectData()
+	{
+		$html = getSimpleHTMLDOM(self::URI . 'showthread.php?threadid=' . $this->getInput('id'));
+		$title = $html->find('div[itemprop=mainEntity] span[itemprop=name]', 0)->innertext;
+
 		$lastURL = $html->find('div.pages > a', -1)->getAttribute('href');
 		$htmlLastPage = getSimpleHTMLDOM(self::URI . $lastURL);
 
 		$prevLastURL = $htmlLastPage->find('div.pages > a', -1)->getAttribute('href');
 		$htmlPrevLastPage = getSimpleHTMLDOM(self::URI . $prevLastURL);
-		
-		$this->extractPosts($htmlPrevLastPage);
-		$this->extractPosts($htmlLastPage);
+
+		$this->extractPosts($htmlPrevLastPage, $title);
+		$this->extractPosts($htmlLastPage, $title);
 		$this->items = array_reverse($this->items);
 	}
 
-	private function extractPosts($html) {
-		foreach($html->find('div.post[id^=p]') as $post) {
+	private function extractPosts($html, $title)
+	{
+		foreach ($html->find('div.post[id^=p]') as $post) {
 			$item = array();
-			$item['title'] = "";
+			$item['title'] = $title;
 			$item['uri'] = $post->find('a.permalink.share[itemprop=url]', 0)->getAttribute('href');
 			$item['content'] = $post->find('div.message[itemprop=text]', 0)->innertext;
 			$item['author'] = $post->find('span.author[itemprop=name]', 0)->innertext;
