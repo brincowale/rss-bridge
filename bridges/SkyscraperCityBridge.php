@@ -20,7 +20,7 @@ class SkyscraperCityBridge extends BridgeAbstract
 	{
 		$htmlLastPage = getSimpleHTMLDOM(self::URI . '/threads/' . $this->getInput('id') . '/page-99999')
 			or returnServerError('No contents received!');
-		$title = $htmlLastPage->find('h1[qid=page-header]')->innertext;
+		$title = $htmlLastPage->find('h1[qid=page-header]', 0)->innertext;
 
 		$prevLastURL = $htmlLastPage->find('a[qid=page-nav-prev-button]', 0)->getAttribute('href');
 		$htmlPrevLastPage = getSimpleHTMLDOM(self::URI . $prevLastURL) or returnServerError('No contents received!');
