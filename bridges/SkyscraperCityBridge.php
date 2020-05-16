@@ -35,7 +35,7 @@ class SkyscraperCityBridge extends BridgeAbstract
 		foreach ($html->find('article[id^=js-post-]') as $post) {
 			$item = array();
 			$item['title'] = $title;
-			$item['uri'] = $post->find('a[qid=post-number]', 0)->getAttribute('href');
+			$item['uri'] = self::URI . $post->find('a[qid=post-number]', 0)->getAttribute('href');
 			$item['content'] = $post->find('article[itemprop=text]', 0)->innertext;
 			$item['author'] = $post->find('a.username[itemprop=url]', 0)->innertext;
 			$item['timestamp'] = $post->find('time[qid=post-date-time]', 0)->getAttribute('datetime');
