@@ -18,14 +18,14 @@ class ElOtroLadoBridge extends BridgeAbstract
 
 	public function collectData()
 	{
-		$html = getSimpleHTMLDOM(self::URI . 'showthread.php?threadid=' . $this->getInput('id'));
+		$html = getSimpleHTMLDOM(self::URI . 'showthread.php?threadid=' . $this->getInput('id')) or returnServerError('No contents received!');
 		$title = $html->find('div[itemprop=mainEntity] span[itemprop=name]', 0)->innertext;
 
 		$lastURL = $html->find('div.pages > a', -1)->getAttribute('href');
-		$htmlLastPage = getSimpleHTMLDOM(self::URI . $lastURL);
+		$htmlLastPage = getSimpleHTMLDOM(self::URI . $lastURL) or returnServerError('No contents received!');
 
 		$prevLastURL = $htmlLastPage->find('div.pages > a', -1)->getAttribute('href');
-		$htmlPrevLastPage = getSimpleHTMLDOM(self::URI . $prevLastURL);
+		$htmlPrevLastPage = getSimpleHTMLDOM(self::URI . $prevLastURL) or returnServerError('No contents received!');
 
 		$this->extractPosts($htmlPrevLastPage, $title);
 		$this->extractPosts($htmlLastPage, $title);
