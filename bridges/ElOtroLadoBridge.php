@@ -18,6 +18,7 @@ class ElOtroLadoBridge extends BridgeAbstract {
 		
 		$this->extractPosts($htmlPrevLastPage);
 		$this->extractPosts($htmlLastPage);
+		$this->items = array_reverse($this->items);
 	}
 
 	private function extractPosts($html) {
