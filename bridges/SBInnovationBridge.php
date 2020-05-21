@@ -39,9 +39,6 @@ class SBInnovationBridge extends BridgeAbstract
 			$item['uri'] = self::URI . 'showthread.php?t=' . $this->getInput('id') . '&p=' . $postID;
 			$item['content'] = $post->find('div[id^=post_message_]', 0)->innertext;
 			$item['author'] = $post->find('a.username > strong > span', 0)->innertext;
-			$date = explode(',', $post->find('span.date', 0)->innertext)[0];
-			$time = $post->find('span.date > span.time', 0)->innertext;
-			$item['timestamp'] = DateTime::createFromFormat('d.m.y-H:i', $date . '-' . $time, new DateTimeZone('GMT+2'))->getTimestamp();
 			$this->items[] = $item;
 		}
 	}
